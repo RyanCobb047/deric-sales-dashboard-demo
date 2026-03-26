@@ -1,0 +1,39 @@
+name: sync-live-dashboard
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Sync live data
+        env:
+          GHL_PIT: ${{ secrets.GHL_PIT }}
+          RETELL_API_KEY: ${{ secrets.RETELL_API_KEY }}
+        run: python3 scripts/sync_live_data.py
+
+      - name: Commit refreshed dashboard data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/live-dashboard.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: refresh live dashboard data"
+          git push

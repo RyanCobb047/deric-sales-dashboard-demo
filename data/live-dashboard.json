@@ -1,0 +1,296 @@
+{
+  "generatedAt": "2026-03-26T21:16:43.456444+00:00",
+  "mode": "live-mvp",
+  "confidence": {
+    "level": "partial",
+    "label": "Partial live data",
+    "text": "Live dashboard currently uses reliable GHL conversation ownership/unread pressure plus recent Retell call activity. It is manager-useful now, but not yet full rep scorecard coverage."
+  },
+  "teamSnapshot": {
+    "assignedConversations": 76,
+    "unreadItems": 44,
+    "inboundWaiting": 22,
+    "staleConversations": 0,
+    "retellCalls24h": 20,
+    "retellVoicemails": 4,
+    "retellConnections": 3
+  },
+  "repCards": [
+    {
+      "name": "Jayson",
+      "assigned": 11,
+      "unread": 14,
+      "stale": 0,
+      "inboundWaiting": 9,
+      "active24h": 11,
+      "lastTouchAt": "2026-03-26T21:02:34.788000+00:00",
+      "needsAttentionReason": "9 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "name": "Morgan",
+      "assigned": 6,
+      "unread": 13,
+      "stale": 0,
+      "inboundWaiting": 4,
+      "active24h": 6,
+      "lastTouchAt": "2026-03-26T20:54:22.842000+00:00",
+      "needsAttentionReason": "4 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "name": "Brendon",
+      "assigned": 30,
+      "unread": 8,
+      "stale": 0,
+      "inboundWaiting": 4,
+      "active24h": 30,
+      "lastTouchAt": "2026-03-26T20:57:59.831000+00:00",
+      "needsAttentionReason": "4 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "name": "Nate",
+      "assigned": 21,
+      "unread": 4,
+      "stale": 0,
+      "inboundWaiting": 3,
+      "active24h": 21,
+      "lastTouchAt": "2026-03-26T20:54:35.212000+00:00",
+      "needsAttentionReason": "3 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "name": "Derek",
+      "assigned": 7,
+      "unread": 5,
+      "stale": 0,
+      "inboundWaiting": 2,
+      "active24h": 7,
+      "lastTouchAt": "2026-03-26T21:04:03.379000+00:00",
+      "needsAttentionReason": "2 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "name": "Mark",
+      "assigned": 1,
+      "unread": 0,
+      "stale": 0,
+      "inboundWaiting": 0,
+      "active24h": 1,
+      "lastTouchAt": "2026-03-26T18:55:37.767000+00:00",
+      "needsAttentionReason": "Queue looks relatively clean in the current sample."
+    }
+  ],
+  "needsAttention": [
+    {
+      "title": "Jayson has 9 inbound waiting / 0 stale",
+      "note": "9 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "title": "Morgan has 4 inbound waiting / 0 stale",
+      "note": "4 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "title": "Brendon has 4 inbound waiting / 0 stale",
+      "note": "4 inbound conversation(s) waiting on follow-up."
+    },
+    {
+      "title": "Nate has 3 inbound waiting / 0 stale",
+      "note": "3 inbound conversation(s) waiting on follow-up."
+    }
+  ],
+  "managerActions": [
+    "Pull the top unread inbound queues first. Those are the cleanest manager interventions.",
+    "Coach the rep with the highest stale conversation count before pushing more new leads.",
+    "Use the Retell feed to spot recent no-connect / voicemail patterns and tighten callback handling.",
+    "Treat unanswered inbound conversations as the priority leak before more reporting vanity work."
+  ],
+  "recentQueue": [
+    {
+      "contactName": "(331) 431-9769",
+      "rep": "Derek",
+      "unread": 3,
+      "direction": "inbound",
+      "type": "TYPE_CALL",
+      "lastMessageBody": "",
+      "lastTouchAt": "2026-03-26T21:04:03.379000+00:00"
+    },
+    {
+      "contactName": "Paul Mobile home",
+      "rep": "Jayson",
+      "unread": 4,
+      "direction": "inbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "^some time",
+      "lastTouchAt": "2026-03-26T21:02:34.788000+00:00"
+    },
+    {
+      "contactName": "Wayne Moore",
+      "rep": "Brendon",
+      "unread": 0,
+      "direction": "outbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "Hey Wayne! Could you send me the PP, Rehab, and ARV for Layman st ?",
+      "lastTouchAt": "2026-03-26T20:57:59.831000+00:00"
+    },
+    {
+      "contactName": "Andrew Fields",
+      "rep": "Nate",
+      "unread": 2,
+      "direction": "inbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "*always good",
+      "lastTouchAt": "2026-03-26T20:54:35.212000+00:00"
+    },
+    {
+      "contactName": "(949) 298-5223",
+      "rep": "Morgan",
+      "unread": 5,
+      "direction": "outbound",
+      "type": "TYPE_CALL",
+      "lastMessageBody": "\ud83d\ude4f",
+      "lastTouchAt": "2026-03-26T20:54:22.842000+00:00"
+    },
+    {
+      "contactName": "Chris Clarkson",
+      "rep": "Brendon",
+      "unread": 0,
+      "direction": "outbound",
+      "type": "TYPE_CALL",
+      "lastMessageBody": "Hey Chris! Did you get a chance to look at the terms? Let me know if you have any questions",
+      "lastTouchAt": "2026-03-26T20:54:10.944000+00:00"
+    },
+    {
+      "contactName": "Bobby B",
+      "rep": "Brendon",
+      "unread": 0,
+      "direction": "outbound",
+      "type": "TYPE_CALL",
+      "lastMessageBody": "I saw you submitted a form",
+      "lastTouchAt": "2026-03-26T20:48:51.549000+00:00"
+    },
+    {
+      "contactName": "Daniel Ochs",
+      "rep": "Nate",
+      "unread": 1,
+      "direction": "inbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "Thanks Delaney is working on getting you stuff",
+      "lastTouchAt": "2026-03-26T20:43:54.775000+00:00"
+    },
+    {
+      "contactName": "Arian X",
+      "rep": "Nate",
+      "unread": 1,
+      "direction": "inbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "Great. Please keep me updated.",
+      "lastTouchAt": "2026-03-26T20:39:42.354000+00:00"
+    },
+    {
+      "contactName": "Jeff Garrett",
+      "rep": "Nate",
+      "unread": 0,
+      "direction": "outbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "No I get it",
+      "lastTouchAt": "2026-03-26T20:37:03.260000+00:00"
+    },
+    {
+      "contactName": "John McDonald",
+      "rep": "Nate",
+      "unread": 0,
+      "direction": "outbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "https://calendly.com/nate-futuresfundinginc/15min",
+      "lastTouchAt": "2026-03-26T20:36:49.229000+00:00"
+    },
+    {
+      "contactName": "Nikki Huber",
+      "rep": "Nate",
+      "unread": 0,
+      "direction": "inbound",
+      "type": "TYPE_SMS",
+      "lastMessageBody": "Noted. Thank you!",
+      "lastTouchAt": "2026-03-26T20:36:19.292000+00:00"
+    }
+  ],
+  "retellFeed": [
+    {
+      "contact": "David McKenna",
+      "direction": "outbound",
+      "status": "Voicemail",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T21:08:47.833000+00:00",
+      "transcriptSnippet": "User: Your call has been forwarded to voicemail. The person you're trying to reach is not available. At the tone, please record your message.  User: When you have finished recording, you may hang up.  Agent: Hey David, t"
+    },
+    {
+      "contact": "Ivel Rodriguez",
+      "direction": "outbound",
+      "status": "Voicemail",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T19:50:34.788000+00:00",
+      "transcriptSnippet": "User: The Google subscriber you have called is not available. Please leave a message after the tone.  Agent: Hey Ivel, this is Alex with Futures Funding just reaching out about the form you filled out on our website, sor"
+    },
+    {
+      "contact": "Amy Avery",
+      "direction": "outbound",
+      "status": "Connected",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T18:32:25.420000+00:00",
+      "transcriptSnippet": "User: Hello?  Agent: Hey, this is Alex with Futures Funding - - you just submitted a form with us. You got a couple minutes? User: Yes.  Agent: Cool - - how did you hear about Futures Funding? User: Online.  Agent: Nice "
+    },
+    {
+      "contact": "Timothy Scott",
+      "direction": "outbound",
+      "status": "No connect",
+      "summary": "No summary returned.",
+      "timestamp": "2026-03-26T17:42:42.123000+00:00",
+      "transcriptSnippet": ""
+    },
+    {
+      "contact": "Ron Burch",
+      "direction": "outbound",
+      "status": "No connect",
+      "summary": "No summary returned.",
+      "timestamp": "2026-03-26T17:04:19.486000+00:00",
+      "transcriptSnippet": ""
+    },
+    {
+      "contact": "Michael Hall",
+      "direction": "outbound",
+      "status": "Connected",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T14:44:16.201000+00:00",
+      "transcriptSnippet": "User: Hello?  Agent: Hey Michael, this  User: Hello?  Agent: is Alex with Futures Funding. You just submitted a form with us - - you got a few minutes? User: Yes, ma'am.  User: Yes, ma'am.  Agent: Cool - - I appreciate y"
+    },
+    {
+      "contact": "Kazim Mohammed",
+      "direction": "outbound",
+      "status": "Voicemail",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T12:10:27.573000+00:00",
+      "transcriptSnippet": "User: Hello? Please leave a message after the tone.  Agent: Hey Kazim, this is Alex with Futures Funding just reaching out about the form you filled out on our website, sorry I missed you. Please give us a callback when "
+    },
+    {
+      "contact": "Eugene Ranger",
+      "direction": "outbound",
+      "status": "No connect",
+      "summary": "No summary returned.",
+      "timestamp": "2026-03-26T12:08:17.091000+00:00",
+      "transcriptSnippet": ""
+    },
+    {
+      "contact": "Charles  KIng",
+      "direction": "outbound",
+      "status": "Connected",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T11:10:41.392000+00:00",
+      "transcriptSnippet": "User: Hello?  Agent: Hey Charles, this is Alex with Futures Funding - - you just submitted a form with us. You got a few minutes? User: Yes.  Agent: Cool - - I appreciate your interest in our company, how\u2019d you hear abou"
+    },
+    {
+      "contact": "Gerald Lunetta",
+      "direction": "outbound",
+      "status": "Voicemail",
+      "summary": "Futures Funding \u2014 Post-Call Analysis",
+      "timestamp": "2026-03-26T09:43:06.173000+00:00",
+      "transcriptSnippet": "User: Telephone number three two one nine four six -seven-seven-four-seven. Can't take your call now.  User: At the tone, please  Agent: Hey Gerald, this is Alex with  User: record your message. When you've finished reco"
+    }
+  ]
+}
