@@ -4,6 +4,8 @@ Interactive static mock dashboard for Deric's sales command center at Futures Fu
 
 ## What it includes
 - Live GHL-backed conversation ownership / unread pressure snapshot
+- Embedded Ask Deric copilot panel driven by a reusable reasoning/context layer off the live dashboard JSON
+- Suggested prompts plus manager-focused answers for ranked priorities, who needs attention, what changed, and next actions
 - Integrated Retell manager module with a 36-hour lookback
 - Rep action cards focused on who needs attention first
 - Alerts / stale follow-up panel

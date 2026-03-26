@@ -51,6 +51,24 @@
 
       <section class="hero-grid" id="kpiGrid"></section>
 
+      <section class="panel copilot-panel">
+        <div class="panel-header split copilot-header">
+          <div>
+            <div class="label">Ask Deric Copilot</div>
+            <h3>Reasoning layer on top of the live dashboard</h3>
+          </div>
+          <div id="copilotUpdatedAt" class="muted small"></div>
+        </div>
+
+        <div class="copilot-input-row">
+          <input id="copilotInput" class="copilot-input" type="text" placeholder="Ask what changed, who needs attention, what to coach, or what Deric should do next" />
+          <button id="copilotAskButton" class="copilot-ask-button">Ask</button>
+        </div>
+
+        <div id="copilotPromptChips" class="copilot-chip-row"></div>
+        <div id="copilotOutput" class="copilot-output"></div>
+      </section>
+
       <section class="panel-grid two-up">
         <div class="panel">
           <div class="panel-header">
