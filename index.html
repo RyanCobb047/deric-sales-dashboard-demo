@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deric Sales Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div>
+        <div class="eyebrow">Futures Funding</div>
+        <h1>Sales Command Center</h1>
+        <p class="muted">Deric's live team war room</p>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="label">Time Range</div>
+        <div class="button-group" id="rangeButtons">
+          <button class="pill active" data-range="today">Today</button>
+          <button class="pill" data-range="yesterday">Yesterday</button>
+          <button class="pill" data-range="7d">7 Days</button>
+          <button class="pill" data-range="30d">30 Days</button>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="label">Ask @FFI_MaxBot</div>
+        <div class="prompt-list" id="promptList"></div>
+      </div>
+
+      <div class="sidebar-card confidence-card">
+        <div class="label">Data Confidence</div>
+        <div id="confidenceBadge" class="confidence high">High confidence</div>
+        <p id="confidenceText" class="muted small"></p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">VP Dashboard Prototype</div>
+          <h2 id="headerRange">Today</h2>
+        </div>
+        <div class="topbar-note">Fake sample data · interactive mockup</div>
+      </header>
+
+      <section class="hero-grid" id="kpiGrid"></section>
+
+      <section class="panel-grid two-up">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="label">Rep Ranking</div>
+              <h3>Strongest to weakest</h3>
+            </div>
+          </div>
+          <div id="repRanking" class="ranking-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="label">Needs Attention</div>
+              <h3>What’s slipping</h3>
+            </div>
+          </div>
+          <div id="attentionList" class="attention-list"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header split">
+          <div>
+            <div class="label">Rep Cards</div>
+            <h3>Team scorecards</h3>
+          </div>
+          <div class="muted small">Click any rep to inspect details</div>
+        </div>
+        <div id="repCards" class="rep-card-grid"></div>
+      </section>
+
+      <section class="panel-grid two-up bottom-grid">
+        <div class="panel detail-panel">
+          <div class="panel-header">
+            <div>
+              <div class="label">Rep Detail</div>
+              <h3 id="detailName">Select a rep</h3>
+            </div>
+          </div>
+          <div id="repDetail" class="rep-detail empty-state">Pick a rep card to see coaching notes, pipeline, and follow-up risk.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="label">Manager Actions</div>
+              <h3>What Deric should do next</h3>
+            </div>
+          </div>
+          <div id="managerActions" class="action-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
