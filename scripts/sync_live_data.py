@@ -101,6 +101,7 @@ def main() -> None:
     now = datetime.now(timezone.utc)
     stale_cutoff = now - timedelta(hours=48)
     day_cutoff = now - timedelta(hours=24)
+    retell_cutoff = now - timedelta(hours=36)
 
     rep_stats: dict[str, dict] = {
         name: {
@@ -170,22 +171,50 @@ def main() -> None:
     retell_feed = []
     voicemail_count = 0
     connect_count = 0
-    for call in calls[:10]:
+    retell_review_count = 0
+    retell_calls_36h = []
+    for call in calls:
+        started_at = to_dt(call.get('start_timestamp'))
+        if not started_at or started_at < retell_cutoff:
+            continue
         analysis = call.get('call_analysis') or {}
         transcript = (call.get('transcript') or '').strip().replace('\n', ' ')
         successful = bool(analysis.get('call_successful')) and not analysis.get('in_voicemail')
+        status = 'Connected' if successful else ('Voicemail' if analysis.get('in_voicemail') else 'No connect')
+        summary_lines = [line.strip().replace('#', '') for line in (analysis.get('call_summary') or 'No summary returned.').splitlines() if line.strip()]
+        summary = summary_lines[0] if summary_lines else 'No summary returned.'
+        manager_read = (
+            'Connected call worth manager review.' if successful else
+            'Voicemail pattern — callback process matters more than script polish here.' if analysis.get('in_voicemail') else
+            'No-connect attempt. Review list quality, timing, and retry discipline.'
+        )
+        if successful or analysis.get('in_voicemail'):
+            retell_review_count += 1
         if analysis.get('in_voicemail'):
             voicemail_count += 1
         if successful:
             connect_count += 1
-        retell_feed.append({
+        card = {
+            'callId': call.get('call_id'),
             'contact': (call.get('metadata') or {}).get('full_name') or call.get('to_number') or 'Unknown',
+            'phone': call.get('to_number') or '',
+            'agentName': call.get('agent_name') or 'Retell',
             'direction': call.get('direction'),
-            'status': 'Connected' if successful else ('Voicemail' if analysis.get('in_voicemail') else 'No connect'),
-            'summary': (analysis.get('call_summary') or 'No summary returned.').splitlines()[0].replace('#', '').strip(),
-            'timestamp': iso(to_dt(call.get('start_timestamp'))),
-            'transcriptSnippet': transcript[:220],
-        })
+            'status': status,
+            'summary': summary,
+            'timestamp': iso(started_at),
+            'durationSeconds': round((call.get('duration_ms') or 0) / 1000),
+            'transcriptSnippet': transcript[:280],
+            'managerRead': manager_read,
+            'recordingUrl': call.get('recording_url'),
+            'recordingMultiChannelUrl': call.get('recording_multi_channel_url'),
+            'disposition': 'Voicemail' if analysis.get('in_voicemail') else ('Connected' if successful else 'No Connect'),
+        }
+        retell_calls_36h.append(card)
+        retell_feed.append(card)
+
+    retell_calls_36h = sorted(retell_calls_36h, key=lambda x: x['timestamp'] or '', reverse=True)
+    retell_feed = retell_calls_36h[:8]
 
     snapshot = {
         'assignedConversations': sum(r['assigned'] for r in rep_cards),
@@ -193,8 +222,10 @@ def main() -> None:
         'inboundWaiting': sum(r['inboundWaiting'] for r in rep_cards),
         'staleConversations': sum(r['stale'] for r in rep_cards),
         'retellCalls24h': len([c for c in calls if to_dt(c.get('start_timestamp')) and to_dt(c.get('start_timestamp')) >= day_cutoff]),
+        'retellCalls36h': len(retell_calls_36h),
         'retellVoicemails': voicemail_count,
         'retellConnections': connect_count,
+        'retellReviewCount': retell_review_count,
     }
 
     payload = {
@@ -211,6 +242,17 @@ def main() -> None:
         'managerActions': MANAGER_ACTIONS,
         'recentQueue': sorted(recent_queue, key=lambda x: x['lastTouchAt'] or '', reverse=True)[:12],
         'retellFeed': retell_feed,
+        'retellModule': {
+            'lookbackHours': 36,
+            'refreshCadence': 'Morning sync',
+            'cards': [
+                {'label': 'Calls in 36h', 'value': len(retell_calls_36h), 'subtext': 'Rolling manager lookback window'},
+                {'label': 'Connected', 'value': connect_count, 'subtext': 'Calls worth listening to first'},
+                {'label': 'Voicemails', 'value': voicemail_count, 'subtext': 'No-connect pattern worth coaching'},
+                {'label': 'Review queue', 'value': retell_review_count, 'subtext': 'Calls likely worth manager review'},
+            ],
+            'calls': retell_calls_36h[:12],
+        },
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2))

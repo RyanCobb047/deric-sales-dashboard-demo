@@ -1,6 +1,7 @@
 const state = {
   data: null,
   selectedRep: null,
+  selectedRetellCallId: null,
 };
 
 const els = {
@@ -16,6 +17,11 @@ const els = {
   confidenceText: document.getElementById('confidenceText'),
   promptList: document.getElementById('promptList'),
   rangeButtons: document.getElementById('rangeButtons'),
+  retellCards: document.getElementById('retellCards'),
+  retellCallList: document.getElementById('retellCallList'),
+  retellDetail: document.getElementById('retellDetail'),
+  retellDetailName: document.getElementById('retellDetailName'),
+  retellMeta: document.getElementById('retellMeta'),
 };
 
 const prompts = [
@@ -78,10 +84,10 @@ function render() {
     { label: 'Unread items', value: snapshot.unreadItems, sub: 'Anything sitting here is decision pressure' },
     { label: 'Inbound waiting', value: snapshot.inboundWaiting, sub: 'This is the immediate follow-up leak' },
     { label: 'Stale conversations', value: snapshot.staleConversations, sub: 'No touch in 48h+' },
-    { label: 'Retell calls (24h)', value: snapshot.retellCalls24h, sub: 'Recent AI call activity' },
+    { label: 'Retell calls (36h)', value: snapshot.retellCalls36h ?? snapshot.retellCalls24h, sub: 'Manager review window' },
     { label: 'Voicemails', value: snapshot.retellVoicemails, sub: 'Recent no-connect pattern' },
     { label: 'Retell connects', value: snapshot.retellConnections, sub: 'Connected AI calls in sample' },
-    { label: 'Mode', value: 'MVP', sub: 'Live data, not full scorecard yet' },
+    { label: 'Review queue', value: snapshot.retellReviewCount ?? 0, sub: 'Calls worth manager eyes first' },
   ];
 
   els.kpiGrid.innerHTML = kpis.map(kpi => `
@@ -136,12 +142,14 @@ function render() {
   `).join('') + `
     <div class="action-item">
       <div class="item-row"><strong>Refresh cadence</strong></div>
-      <div class="item-meta">Data file generated at ${fmtTs(data.generatedAt)}. Scheduled sync can keep this fresh without exposing secrets in the browser.</div>
+      <div class="item-meta">Morning sync + manual trigger. Data file generated at ${fmtTs(data.generatedAt)}.</div>
     </div>`;
 
   els.confidenceBadge.className = `confidence ${data.confidence.level}`;
   els.confidenceBadge.textContent = data.confidence.label;
   els.confidenceText.textContent = data.confidence.text;
+
+  renderRetellModule();
 }
 
 function renderRepDetail(rep) {
@@ -168,9 +176,59 @@ function renderRepDetail(rep) {
       <div class="label">Recent queue samples</div>
       ${queue.length ? queue.map(item => `<p class="rep-note">• ${item.contactName} — ${item.direction || 'unknown'} / ${item.type || 'unknown'} / unread ${item.unread} / ${fmtTs(item.lastTouchAt)}</p>`).join('') : '<p class="rep-note">No recent queue samples in the current fetch.</p>'}
     </div>
+  `;
+}
+
+function renderRetellModule() {
+  const module = state.data.retellModule;
+  if (!module) return;
+  els.retellMeta.textContent = `${module.lookbackHours}-hour lookback · ${module.refreshCadence}`;
+  els.retellCards.innerHTML = module.cards.map(card => `
+    <div class="metric-box">
+      <div class="label">${card.label}</div>
+      <div class="num">${card.value}</div>
+      <div class="rep-note">${card.subtext}</div>
+    </div>
+  `).join('');
+
+  if (!state.selectedRetellCallId && module.calls.length) state.selectedRetellCallId = module.calls[0].callId;
+  els.retellCallList.innerHTML = module.calls.map(call => `
+    <div class="retell-call-item ${state.selectedRetellCallId === call.callId ? 'active' : ''}" onclick="selectRetellCall('${call.callId}')">
+      <div class="item-row"><strong>${call.contact}</strong><strong>${call.status}</strong></div>
+      <div class="item-meta">${fmtTs(call.timestamp)} · ${call.agentName} · ${call.durationSeconds || 0}s</div>
+      <div class="rep-note">${call.managerRead}</div>
+    </div>
+  `).join('');
+
+  const selected = module.calls.find(call => call.callId === state.selectedRetellCallId) || module.calls[0];
+  if (selected) renderRetellDetail(selected);
+}
+
+function renderRetellDetail(call) {
+  els.retellDetailName.textContent = call.contact;
+  els.retellDetail.innerHTML = `
+    <div class="detail-chip-row">
+      <div class="chip">${call.status}</div>
+      <div class="chip">${call.direction || 'unknown direction'}</div>
+      <div class="chip">${call.durationSeconds || 0}s</div>
+      <div class="chip">${fmtTs(call.timestamp)}</div>
+    </div>
+    <div class="coaching-box">
+      <div class="label">Manager read</div>
+      <p class="rep-note">${call.managerRead}</p>
+    </div>
     <div class="detail-section">
-      <div class="label">Retell feed</div>
-      ${data.retellFeed.slice(0, 3).map(call => `<p class="rep-note">• ${call.contact} — ${call.status} — ${fmtTs(call.timestamp)}</p>`).join('')}
+      <div class="label">Call summary</div>
+      <p class="rep-note">${call.summary}</p>
+    </div>
+    <div class="detail-section">
+      <div class="label">Transcript snippet</div>
+      <p class="rep-note">${call.transcriptSnippet || 'No transcript snippet available.'}</p>
+    </div>
+    <div class="detail-section">
+      <div class="label">Links</div>
+      <p class="rep-note">${call.recordingUrl ? `<a href="${call.recordingUrl}" target="_blank" rel="noopener noreferrer">Open recording</a>` : 'No recording URL available.'}</p>
+      <p class="rep-note">${call.recordingMultiChannelUrl ? `<a href="${call.recordingMultiChannelUrl}" target="_blank" rel="noopener noreferrer">Open multichannel audio</a>` : ''}</p>
     </div>
   `;
 }
@@ -178,6 +236,11 @@ function renderRepDetail(rep) {
 window.selectRep = function(name) {
   state.selectedRep = name;
   render();
+}
+
+window.selectRetellCall = function(callId) {
+  state.selectedRetellCallId = callId;
+  renderRetellModule();
 }
 
 async function boot() {

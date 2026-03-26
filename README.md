@@ -4,7 +4,7 @@ Interactive static mock dashboard for Deric's sales command center at Futures Fu
 
 ## What it includes
 - Live GHL-backed conversation ownership / unread pressure snapshot
-- Recent Retell call activity feed
+- Integrated Retell manager module with a 36-hour lookback
 - Rep action cards focused on who needs attention first
 - Alerts / stale follow-up panel
 - Manager action recommendations
@@ -25,5 +25,5 @@ Then open <http://localhost:8787>.
 
 ## Notes
 - The original mock used fake/demo data; the live MVP now reads from a generated `data/live-dashboard.json` file built from GHL + Retell API pulls.
-- GitHub Pages serves the site; GitHub Actions refreshes the data file on a schedule.
+- GitHub Pages serves the site; GitHub Actions refreshes the data file on a morning schedule.
 - Built to feel like a sales war room rather than a CRM export.

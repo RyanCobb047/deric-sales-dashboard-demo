@@ -149,6 +149,27 @@ h3 { font-size: 1.1rem; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
+.retell-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.retell-call-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.retell-call-item {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+.retell-call-item.active, .retell-call-item:hover {
+  border-color: rgba(83,224,215,0.45);
+}
 .rep-card {
   border-radius: 20px;
   padding: 18px;
@@ -225,13 +246,13 @@ h3 { font-size: 1.1rem; }
 .prompt-item:hover { border-color: rgba(83,224,215,0.35); }
 
 @media (max-width: 1200px) {
-  .hero-grid, .rep-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-grid, .rep-card-grid, .retell-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 960px) {
   .app-shell, .panel-grid.two-up, .bottom-grid { grid-template-columns: 1fr; }
   .sidebar { border-right: 0; border-bottom: 1px solid var(--panel-border); }
 }
 @media (max-width: 640px) {
-  .hero-grid, .rep-card-grid { grid-template-columns: 1fr; }
+  .hero-grid, .rep-card-grid, .retell-card-grid { grid-template-columns: 1fr; }
   .main, .sidebar { padding: 18px; }
 }
