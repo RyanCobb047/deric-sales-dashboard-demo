@@ -4,15 +4,12 @@ from __future__ import annotations
 import json
 import os
 import subprocess
-from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib import parse
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKSPACE = ROOT.parents[2]
 CREDENTIALS_ENV = Path('/Users/ryancobb/.openclaw/credentials/.env')
-GHL_REQ = WORKSPACE / 'skills/ghl/scripts/ghl_request.sh'
-RETELL_SDK = WORKSPACE / 'skills/retell-ai/scripts/retell_sdk.py'
 OUT = ROOT / 'data/live-dashboard.json'
 
 REPS = {
@@ -45,11 +42,25 @@ def load_env_var(name: str, fallback_name: str | None = None) -> str | None:
     return None
 
 
-def run_json(cmd: list[str], env: dict[str, str]) -> dict | list:
-    res = subprocess.run(cmd, env=env, text=True, capture_output=True)
+def run_json(cmd: list[str]) -> dict | list:
+    res = subprocess.run(cmd, text=True, capture_output=True)
     if res.returncode != 0:
         raise RuntimeError(res.stderr or res.stdout or f'command failed: {cmd}')
     return json.loads(res.stdout)
+
+
+def get_json(url: str, headers: dict[str, str]) -> dict | list:
+    cmd = ['curl', '--http1.1', '-sS', '--fail', url]
+    for k, v in headers.items():
+        cmd.extend(['-H', f'{k}: {v}'])
+    return run_json(cmd)
+
+
+def post_json(url: str, payload: dict, headers: dict[str, str]) -> dict | list:
+    cmd = ['curl', '--http1.1', '-sS', '--fail', url, '-X', 'POST', '-H', 'Content-Type: application/json', '--data', json.dumps(payload)]
+    for k, v in headers.items():
+        cmd.extend(['-H', f'{k}: {v}'])
+    return run_json(cmd)
 
 
 def to_dt(ms: int | None) -> datetime | None:
@@ -63,24 +74,26 @@ def iso(dt: datetime | None) -> str | None:
 
 
 def main() -> None:
-    env = os.environ.copy()
     ghl_token = load_env_var('GHL_PIT', 'GHL_KEY')
     retell_key = load_env_var('RETELL_API_KEY')
     if not ghl_token:
         raise SystemExit('Missing GHL token (GHL_PIT or GHL_KEY).')
     if not retell_key:
         raise SystemExit('Missing RETELL_API_KEY.')
-    env['GHL_PIT'] = ghl_token
-    env['RETELL_API_KEY'] = retell_key
 
-    conversations_payload = run_json([
-        str(GHL_REQ), 'GET', '/conversations/search',
-        '--query', 'locationId=Xxy4lpWL2a1uj0MLYnLN',
-        '--query', 'limit=100'
-    ], env)
-    calls_payload = run_json([
-        'python3', str(RETELL_SDK), 'list', 'calls', '--limit', '20'
-    ], env)
+    ghl_headers = {
+        'Authorization': f'Bearer {ghl_token}',
+        'Version': '2021-07-28',
+        'Accept': 'application/json',
+    }
+    retell_headers = {
+        'Authorization': f'Bearer {retell_key}',
+        'Accept': 'application/json',
+    }
+
+    conv_query = parse.urlencode({'locationId': 'Xxy4lpWL2a1uj0MLYnLN', 'limit': 100})
+    conversations_payload = get_json(f'https://services.leadconnectorhq.com/conversations/search?{conv_query}', ghl_headers)
+    calls_payload = post_json('https://api.retellai.com/v2/list-calls', {'limit': 20}, retell_headers)
 
     conversations = conversations_payload.get('conversations', [])
     calls = calls_payload if isinstance(calls_payload, list) else calls_payload.get('calls', [])
